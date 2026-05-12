@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import "./control-panel.css";
+import Timer from "../timer/timer.component";
+import {
+  TIMEOUTGAME_BASICO,
+  TIMEOUTGAME_INTERMEDIO,
+  TIMEOUTGAME_AVANCADO,
+} from "../../constants";
 
 function ControlPanel(props) {
   //passar valores de pai para o filho
   const { gameStarted, onGameStart, onLevelChange, selectedLevel } = props;
+  const [styleBackground, setstyleBackground] = useState(false);
+
   const gameStartedClass = gameStarted ? " gameStarted" : "";
+
+  const handleTimer = (seg) => {
+    if (seg === 10) setstyleBackground(true);
+    if (seg === 0) onGameStart();
+  };
 
   return (
     <section id="panel-control">
@@ -39,7 +52,21 @@ function ControlPanel(props) {
         </p>
         <dl className={"list-item left" + gameStartedClass}>
           <dt>Tempo de Jogo:</dt>
-          <dd id="gameTime">0s</dd>
+          <dd id="gameTime">
+            {gameStarted && (
+              <Timer
+                timeout={
+                  selectedLevel == "1"
+                    ? TIMEOUTGAME_BASICO
+                    : selectedLevel == "2"
+                      ? TIMEOUTGAME_INTERMEDIO
+                      : TIMEOUTGAME_AVANCADO
+                }
+                onTimer={handleTimer}
+              />
+            )}
+            s
+          </dd>
         </dl>
         <dl className={`list-item right${gameStartedClass}`}>
           <dt>Pontuação TOP:</dt>
