@@ -4,8 +4,16 @@ import { Card } from "../index";
 import { CARDS_LOGOS } from "../../constants";
 import { shuffleArray } from "../../helpers";
 
-function GamePanel({ selectedLevel }) {
+function GamePanel({ props, selectedLevel, gameStarted }) {
   const [cards, setCards] = useState([]);
+
+  let flippedCards = [];
+
+  //exeplo de passar do filho para o pai, pai gamepael, filho card
+  const handleFlippedCard = (props) => {
+    flippedCards = [...flippedCards, props];
+    if (flippedCards.length === 2) console.log("2 cards flipped");
+  };
 
   let gameClass =
     selectedLevel === "1"
@@ -55,7 +63,12 @@ function GamePanel({ selectedLevel }) {
       <h3 className="sr-only">Peças do Jogo</h3>
       <div id="game" className={gameClass}>
         {cards.map((ele) => (
-          <Card key={ele.id} name={ele.name}></Card>
+          <Card
+            key={ele.id}
+            name={ele.name}
+            gameStarted={gameStarted}
+            onFlippedCards={handleFlippedCard}
+          ></Card>
         ))}
         {/* Ciclo em cima igual 
         <Card name="angular" />
